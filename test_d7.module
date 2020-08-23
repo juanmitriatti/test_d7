@@ -1,0 +1,77 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function test_d7_menu()
+{
+  $items = array();
+
+  $items['test/test-d7-form'] = array(
+    'title' => 'Test Form', //page title
+    'description' => 'User form, its only about email and username.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('test_d7_form'),
+    'access callback' => TRUE
+  );
+
+  return $items;
+}
+
+function test_d7_form($form, &$form_state)
+{
+
+  $form['email'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Test email address'),
+    '#size' => 50,
+    '#maxlength' => 80,
+    '#required' => TRUE,
+  );
+
+  $form['username'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Test username address'),
+    '#size' => 50,
+    '#maxlength' => 80,
+    '#required' => TRUE,
+  );
+
+  $form['submit_button'] = array(
+    '#type' => 'submit',
+    '#value' => t('Click Here!'),
+  );
+
+  return $form;
+}
+
+/**
+ * Form validation method.
+ */
+function test_d7_form_validate($form, &$form_state)
+{
+  $max_length = 80;
+  if (strlen($form_state['values']['email']) > $max_length) {
+    form_set_error('email', t('The maximum length of the email is ' . $max_length . ' characters.'));
+  }
+  if (strlen($form_state['values']['username']) > $max_length) {
+    form_set_error('username', t('The maximum length of the username is ' . $max_length . ' characters.'));
+  }
+}
+
+/**
+ * Form submit function for test_d7_form.
+ */
+function test_d7_form_submit($form, &$form_state)
+{
+  $values = $form_state['values'];
+
+
+  if (empty($values['username'])) {
+    $values['username'] = "no-user";
+  }
+
+  $form_state['redirect'] = array(
+    'test/user/' . trim($values['username']),
+  );
+}

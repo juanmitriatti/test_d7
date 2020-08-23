@@ -1,0 +1,4 @@
+name = Test D7 Module
+description = This is a module just to show drupal 7 skills.
+package = Custom
+core = 7.x

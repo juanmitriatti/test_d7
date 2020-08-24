@@ -87,13 +87,13 @@ function test_d7_form($form, &$form_state)
 function test_d7_form_validate($form, &$form_state)
 {
   $max_length = 80;
-  if(strlen($form_state['values']['email']) > $max_length) {
+  if (strlen($form_state['values']['email']) > $max_length) {
     form_set_error('email', t('The maximum length of the email is ' . $max_length . ' characters.'));
   }
-  if(!filter_var($form_state['values']['email'], FILTER_VALIDATE_EMAIL)) {
+  if (!filter_var($form_state['values']['email'], FILTER_VALIDATE_EMAIL)) {
     form_set_error('email', t('Invalid email format'));
   }
-  if(strlen($form_state['values']['username']) > $max_length) {
+  if (strlen($form_state['values']['username']) > $max_length) {
     form_set_error('username', t('The maximum length of the username is ' . $max_length . ' characters.'));
   }
 }
@@ -105,17 +105,21 @@ function test_d7_form_submit($form, &$form_state)
 {
   $values = $form_state['values'];
   if (!empty($values['email']) && !empty($values['username']) && !empty($values['password']) && !empty($values['first_name'] && !empty($values['last_name']))) {
-    db_insert('test_form_data')
-      ->fields(array(
-        'first_name' => $values['first_name'],
-        'last_name' => $values['last_name'],
-        'email' => $values['email'],
-        'phone' => $values['phone'],
-        'username' => $values['username'],
-        'password' => $values['password'],
-      ))
-      ->execute();
-    drupal_set_message(t('The form has been submitted.'));
+    try {
+      db_insert('test_form_data')
+        ->fields(array(
+          'first_name' => $values['first_name'],
+          'last_name' => $values['last_name'],
+          'email' => $values['email'],
+          'phone' => $values['phone'],
+          'username' => $values['username'],
+          'password' => $values['password'],
+        ))
+        ->execute();
+      drupal_set_message(t('The form has been submitted.'));
+    } catch (PDOException $e) {
+      drupal_set_message(t('User was not added, please try again later.'));
+    }
   }
 }
 

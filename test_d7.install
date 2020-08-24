@@ -2,13 +2,10 @@
 
 /**
 * Implements hook_install().
-*
 */
 function test_d7_install() {
   drupal_install_schema('test_d7');
 }
-
-
 
 /**
 * Implements hook_schema().
@@ -16,28 +13,15 @@ function test_d7_install() {
 function test_d7_schema() {
   $schema = array();
 
-  $schema['test_d7_data'] = array(
+  $schema['test_form_data'] = array(
     'description' => t('Stores some user data.'),
     'fields' => array(
       'id' => array(
-        'description' => t('The primary key for each edit log entry.'),
+        'description' => t('The primary key for each user'),
         'type' => 'serial',
         'unsigned' => TRUE,
         'not null' => TRUE,
       ),
-      'nid' => array(
-        'description' => t('The primary identifier for a node.'),
-        'type' => 'int',
-        'unsigned' => TRUE,
-        'not null' => TRUE,
-      ),
-      'uid' => array(
-          'description' => t('The primary identifier for a user.'),
-          'type' => 'int',
-          'unsigned' => TRUE,
-          'not null' => TRUE,
-          'default' => 0,
-        ),
       'email' => array(
         'description' => 'Email address.',
         'type' => 'varchar',
@@ -52,33 +36,12 @@ function test_d7_schema() {
         'not null' => TRUE,
         'default' => '',
       ),
-      'vid' => array(
-        'description' => t('The primary identifier for a node revision.'),
-        'type' => 'int',
-        'unsigned' => TRUE,
-        'not null' => TRUE,
-      ),
-      'language' => array(
-        'type' => 'varchar',
-        'length' => 32,
-        'not null' => TRUE,
-        'default' => '',
-        'description' => 'The language for this node or translation.',
-      ),
-      'timestamp' => array(
-        'description' => t('The Unix timestamp when the edit was performed.'),
-        'type' => 'int',
-        'not null' => TRUE,
-        'default' => 0,
-      ),
     ),
     'primary key' => array('id'),
     'indexes' => array(
-      'timestamp' => array('timestamp'),
-      'nid' => array('nid'),
+      'email' => array('email'),
     ),
   );
-
 
   return $schema;
 }

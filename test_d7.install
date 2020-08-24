@@ -23,14 +23,14 @@ function test_d7_schema() {
         'not null' => TRUE,
       ),
       'email' => array(
-        'description' => 'Email address.',
+        'description' => t('Email address'),
         'type' => 'varchar',
         'length' => 80,
         'not null' => TRUE,
         'default' => '',
       ),
       'username' => array(
-        'description' => 'Username',
+        'description' => t('Username'),
         'type' => 'varchar',
         'length' => 80,
         'not null' => TRUE,

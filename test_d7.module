@@ -30,7 +30,7 @@ function test_d7_form($form, &$form_state)
 
   $form['username'] = array(
     '#type' => 'textfield',
-    '#title' => t('Username address'),
+    '#title' => t('Username'),
     '#size' => 50,
     '#maxlength' => 80,
     '#required' => TRUE,
@@ -54,7 +54,7 @@ function test_d7_form_validate($form, &$form_state)
     form_set_error('email', t('The maximum length of the email is ' . $max_length . ' characters.'));
   }
   if (!filter_var($form_state['values']['email'], FILTER_VALIDATE_EMAIL)) {
-    form_set_error('username', t('Invalid email format'));
+    form_set_error('email', t('Invalid email format'));
   }
   if (strlen($form_state['values']['username']) > $max_length) {
     form_set_error('username', t('The maximum length of the username is ' . $max_length . ' characters.'));

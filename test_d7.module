@@ -12,14 +12,33 @@ function test_d7_menu()
     'description' => 'User form: created only to store email and username inputs.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('test_d7_form'),
-    'access callback' => TRUE
+    'access callback' => TRUE,
   );
 
   return $items;
 }
 
+/**
+ * Creating form.
+ */
 function test_d7_form($form, &$form_state)
 {
+  $form['first_name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('First Name'),
+    '#size' => 50,
+    '#maxlength' => 80,
+    '#required' => TRUE,
+  );
+
+  $form['last_name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Last Name'),
+    '#size' => 50,
+    '#maxlength' => 80,
+    '#required' => TRUE,
+  );
+
   $form['email'] = array(
     '#type' => 'textfield',
     '#title' => t('Email address'),
@@ -36,6 +55,23 @@ function test_d7_form($form, &$form_state)
     '#required' => TRUE,
   );
 
+  $form['password'] = array(
+    '#type' => 'password',
+    '#title' => t('Password'),
+    '#description' => t('Please enter your password'),
+    '#size' => 50,
+    '#maxlength' => 80,
+    '#required' => TRUE,
+  );
+
+  $form['phone'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Phone number'),
+    '#size' => 50,
+    '#maxlength' => 80,
+    '#required' => FALSE,
+  );
+
   $form['submit_button'] = array(
     '#type' => 'submit',
     '#value' => t('Click Here!'),
@@ -44,35 +80,42 @@ function test_d7_form($form, &$form_state)
   return $form;
 }
 
+
 /**
- * Form validation method.
+ * Implements hook_validate().
  */
 function test_d7_form_validate($form, &$form_state)
 {
   $max_length = 80;
-  if (strlen($form_state['values']['email']) > $max_length) {
+  if(strlen($form_state['values']['email']) > $max_length) {
     form_set_error('email', t('The maximum length of the email is ' . $max_length . ' characters.'));
   }
-  if (!filter_var($form_state['values']['email'], FILTER_VALIDATE_EMAIL)) {
+  if(!filter_var($form_state['values']['email'], FILTER_VALIDATE_EMAIL)) {
     form_set_error('email', t('Invalid email format'));
   }
-  if (strlen($form_state['values']['username']) > $max_length) {
+  if(strlen($form_state['values']['username']) > $max_length) {
     form_set_error('username', t('The maximum length of the username is ' . $max_length . ' characters.'));
   }
 }
 
 /**
- * Form submit function for test_d7_form.
+ * Implements hook_form_submit().
  */
 function test_d7_form_submit($form, &$form_state)
 {
   $values = $form_state['values'];
-  if (empty($values['username'])) {
-    $values['username'] = "no-user";
+  if (!empty($values['email']) && !empty($values['username']) && !empty($values['password']) && !empty($values['first_name'] && !empty($values['last_name']))) {
+    db_insert('test_form_data')
+      ->fields(array(
+        'first_name' => $values['first_name'],
+        'last_name' => $values['last_name'],
+        'email' => $values['email'],
+        'phone' => $values['phone'],
+        'username' => $values['username'],
+        'password' => $values['password'],
+      ))
+      ->execute();
+    drupal_set_message(t('The form has been submitted.'));
   }
-
-  $form_state['redirect'] = array(
-    'test/user/' . trim($values['username']),
-  );
 }
 

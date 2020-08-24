@@ -22,6 +22,27 @@ function test_d7_schema() {
         'unsigned' => TRUE,
         'not null' => TRUE,
       ),
+      'first_name' => array(
+        'description' => t('First Name'),
+        'type' => 'varchar',
+        'length' => 80,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'last_name' => array(
+        'description' => t('Last Name'),
+        'type' => 'varchar',
+        'length' => 80,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'phone' => array(
+        'description' => t('Phone number'),
+        'type' => 'varchar',
+        'length' => 80,
+        'not null' => FALSE,
+        'default' => '',
+      ),
       'email' => array(
         'description' => t('Email address'),
         'type' => 'varchar',
@@ -36,6 +57,13 @@ function test_d7_schema() {
         'not null' => TRUE,
         'default' => '',
       ),
+      'password' => array(
+          'description' => t('Password'),
+          'type' => 'varchar',
+          'length' => 80,
+          'not null' => TRUE,
+          'default' => '',
+      ),
     ),
     'primary key' => array('id'),
     'indexes' => array(
@@ -45,3 +73,4 @@ function test_d7_schema() {
 
   return $schema;
 }
+
